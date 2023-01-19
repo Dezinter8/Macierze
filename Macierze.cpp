@@ -1,5 +1,8 @@
 #include <iostream> 
 #include <fstream>
+#include <cstdlib>
+#include <cstdio>
+#include <ctime>
 using namespace std; 
  
 class macierz 
@@ -31,6 +34,9 @@ class macierz
 		void Wyznacznik(unsigned int wiersze, unsigned int kolumny);
 		void Stopien(unsigned int wiersze, unsigned int kolumny);
 		void readFromFile(string fileName);
+		void Random(unsigned int wiersze, unsigned int kolumny);
+		void Szukaj(unsigned int cos);
+		void Zmien(unsigned int numer, unsigned int wartosc);
 }; 
 
 
@@ -162,6 +168,7 @@ void macierz::Stopien (unsigned int wiersze, unsigned int kolumny)
 	cout << Stopien << endl;
 }
 
+/*
 void macierz::readFromFile(string fileName) 
 {
 	ifstream file(fileName);
@@ -170,6 +177,74 @@ void macierz::readFromFile(string fileName)
 			file >> tablica[i][j];
 	file.close();
 }
+*/
+
+
+void macierz::Random (unsigned int wiersze, unsigned int kolumny)
+{
+	srand( time( NULL ) );
+	int losowa;
+	for ( int i = 0; i < wiersze; i++ ) 
+    {  
+		for (int j = 0; j < kolumny; j++) 
+        { 
+        losowa = (rand() % 9 );
+        tablica[i][j] = losowa; 
+        } 
+    }  
+}
+
+
+void macierz::Szukaj (unsigned int cos)
+{
+	int ile = 0;
+	int F = wiersze * kolumny;
+	int tab[F];
+	int temp = 1;
+	for ( int i = 0; i < wiersze; i++ ) 
+    {  
+		for (int j = 0; j < kolumny; j++) 
+        { 
+        if(tablica[i][j] == cos)
+        {
+        	tab[ile] = temp;
+        	ile++;
+		}
+        temp++;
+    	}
+    } 
+    
+    if(ile == 0)
+    	cout << " NIE MA ELEMENTU o podanej wartosci w Macierzy!"<< endl;
+    else
+	{
+		cout << " Liczba : |" << cos << "| wystepuje w macierzy: |" << ile << "| razy." << endl;  
+		cout << " Liczba : |" << cos << "| wystepuje w macierzy na nastepujacych pozycjach: | ";
+		for (int i = 0; i < ile; i++)
+			cout << tab[i] << " | ";
+		cout<< endl;
+	}
+}
+
+
+void macierz::Zmien (unsigned int numer, unsigned int wartosc)
+{
+	int temp = 1;
+	for ( int i = 0; i < wiersze; i++ ) 
+    {  
+		for (int j = 0; j < kolumny; j++) 
+        { 
+        if(temp == numer)
+        {
+        	tablica[i][j] = wartosc;
+		}
+        temp++;
+    	}
+    } 
+}
+
+
+
 
 
 macierz operator+(const macierz &m1, const macierz &m2) 
@@ -221,17 +296,6 @@ macierz operator*(const macierz &m1, const macierz &m2)
 
 
 
-macierz operator*(const macierz &m1, const double skalar) 
-{ 
-	macierz m2(m1); 
-    for (int i = 0; i <m1.wiersze; i++)        
-       for (int j = 0; j <m1.kolumny; j++) 
-       		m2.tablica[i][j] = m1.tablica[i][j]*skalar;            
-    return m2; 
-}  
-
-
-
 void wyswietlmenu()
 {
 	cout << endl;
@@ -243,15 +307,12 @@ void wyswietlmenu()
     cout << " 5. WYZNACZNIK Macierzy(DLA 2x2 i 3x3)\n";
     cout << " 6. STOPIEN Macierzy\n";
 	cout << " 7. IMPORT Macierzy\n";
-    cout << " 8. DOPELNIENIE Macierzy(DO ZROBIENIA?)\n";
-    cout << " 9. ODWRACANIE Macierzy(DO ZROBIENIA?)\n";
+    cout << " 8. SZUKANIE elementow Macierzy\n";
+    cout << " 9. ZMIANA wartosci elementu Macierzy\n";
     cout << " 10. ZAMKNIECIE PROGRAMU!\n";
     cout << endl;
     cout << " Co chcesz zrobic? (wybierz odpowiednia liczbe) \n";
 };
-
-
-
 
 
 
@@ -462,6 +523,7 @@ int main()
 		        
 				case 7: //import z pliku
 				{
+					/*
 					int n = 0;
 					string fileName;
 					cout << "Przykladowa zawartosc pliku:\n1 2 3 4\n4 5 6 6\n7 8 9 7\n4 6 6 6 " << endl;
@@ -474,12 +536,68 @@ int main()
 					m.readFromFile(fileName);
 					cout << "Pobrana macierz:" << endl;
 					m.Wyswietl();
+					*/
 					break;
 				}
 				
-		        case 8:break;
+		        case 8: //Odnajdywanie elementów po podanej wartoœci
+		        {
+		        	cout << " TWORZENIE MACIERZY: " << endl;
+					cout << endl;
+					    
+					cout << " Podaj WIELKOSC macierzy [NxN]: ";
+					cin>>liczbaA;                
+					cout << " Stworzyles MACIERZ: " << liczbaA << "x" << liczbaA << endl;
+					cout << endl;       
+		
+					cout << " POGLADOWE uzupelnienie LOSOWE:"<< endl;                    
+		            macierz A (liczbaA,liczbaA);
+		            A.Random(liczbaA, liczbaA);
+		            A.Wyswietl();
+		            
+		            cout << " Jakiej wartosci SZUKASZ w Macierzy? "<< endl;      
+		            int cos;
+		            cin >> cos;
+		            A.Szukaj(cos);
+	  
+		            break;		
+				}
 
-				case 9:break;
+				case 9: // Zamiana wartoœci elementu na podan¹.
+				{
+		        	cout << " TWORZENIE MACIERZY: " << endl;
+					cout << endl;
+					    
+					cout << " Podaj WIELKOSC macierzy [NxN]: ";
+					cin>>liczbaA;                
+					cout << " Stworzyles MACIERZ: " << liczbaA << "x" << liczbaA << endl;
+					cout << endl;       
+		
+					cout << " POGLADOWE uzupelnienie LOSOWE:"<< endl;                    
+		            macierz A (liczbaA,liczbaA);
+		            A.Random(liczbaA, liczbaA);
+		            A.Wyswietl();
+		            
+		            int granica = liczbaA * liczbaA;
+		            cout << " Podaj NUMER elementu do Zmiany? "<< endl;      
+		            int numer;
+		            cin >> numer;
+		            if (numer < 1 || numer > granica)
+		            {
+		            	cout << " BLAD! NUMER poza zakresem badanej Macierzy!" << endl;
+					}
+					else
+					{
+						cout << " Podaj nowa WARTOSC elementu:  "<< endl;      
+			            int wartosc;
+			            cin >> wartosc;
+			            A.Zmien(numer, wartosc);
+			            cout << " MACIERZ po dokonaniu ZMIANY: "<< endl; 
+		    			A.Wyswietl();
+					}
+					
+		            break;		
+				}	
 		        
 		        case 10:
 				{
