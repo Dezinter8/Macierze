@@ -1,4 +1,5 @@
 #include <iostream> 
+#include <fstream>
 using namespace std; 
  
 class macierz 
@@ -28,6 +29,8 @@ class macierz
       	void WprowadzDane(unsigned int wiersze, unsigned int kolumny);
 		void Transpozycja(unsigned int wiersze, unsigned int kolumny);
 		void Wyznacznik(unsigned int wiersze, unsigned int kolumny);
+		void Stopien(unsigned int wiersze, unsigned int kolumny);
+		void readFromFile(string fileName);
 }; 
 
 
@@ -99,7 +102,7 @@ void macierz::WprowadzDane (unsigned int wiersze, unsigned int kolumny)
             while(!(cin>>wartosc))//wykonuje sie dopoki uzytkownik bedzie wprowadzal bledne dane
             { 
               	cout << "BLAD! Wprowadz poprawna wartosc: ";
-              	cin.clear(); //kasowanie flagi b³êdu strumienia
+              	cin.clear(); //kasowanie flagi bï¿½ï¿½du strumienia
               	cin.sync(); //kasowanie zawartosci bufora obiektu cin
             }
         tablica[i][j] = wartosc; 
@@ -144,6 +147,29 @@ void macierz::Wyznacznik (unsigned int wiersze, unsigned int kolumny)
 	}
 }
 
+void macierz::Stopien (unsigned int wiersze, unsigned int kolumny)
+{
+	int Stopien = 0;
+    for (int i = 0; i < wiersze; i++) {
+        int nonZeroElements = 0;
+        for (int j = 0; j < wiersze; j++) {
+            if (tablica[i][j] != 0) {
+                nonZeroElements++;
+            }
+        }
+        Stopien = max(Stopien, nonZeroElements);
+    }
+	cout << Stopien << endl;
+}
+
+void macierz::readFromFile(string fileName) 
+{
+	ifstream file(fileName);
+	for (int i = 0; i < wiersze; i++)
+		for (int j = 0; j < kolumny; j++)
+			file >> tablica[i][j];
+	file.close();
+}
 
 
 macierz operator+(const macierz &m1, const macierz &m2) 
@@ -215,10 +241,11 @@ void wyswietlmenu()
     cout << " 3. MNOZENIE Macierzy\n";
     cout << " 4. TRANSPOZYCJA Macierzy\n";
     cout << " 5. WYZNACZNIK Macierzy(DLA 2x2 i 3x3)\n";
-    cout << " 6. ODWRACANIE Macierzy(DO ZROBIENIA?)\n";
-    cout << " 6. STOPIEN Macierzy(DO ZROBIENIA?)\n";
-    cout << " 7. DOPELNIENIE Macierzy(DO ZROBIENIA?)\n";
-    cout << " 8. ZAMKNIECIE PROGRAMU!\n";
+    cout << " 6. STOPIEN Macierzy\n";
+	cout << " 7. IMPORT Macierzy\n";
+    cout << " 8. DOPELNIENIE Macierzy(DO ZROBIENIA?)\n";
+    cout << " 9. ODWRACANIE Macierzy(DO ZROBIENIA?)\n";
+    cout << " 10. ZAMKNIECIE PROGRAMU!\n";
     cout << endl;
     cout << " Co chcesz zrobic? (wybierz odpowiednia liczbe) \n";
 };
@@ -234,12 +261,12 @@ int main()
 	int liczbaB;
 	int wybor;
  	
- 	while(wybor != 8)
+ 	while(wybor != 10)
  	{
  		wyswietlmenu();
 	    cin>>wybor;
 	    
-		if (wybor < 1 || wybor > 8)
+		if (wybor < 1 || wybor > 10)
  			cout << " BLAD! Podaj odpowiednia liczbe!" << endl;
  			
  		else
@@ -385,7 +412,7 @@ int main()
 		            break;
 				}
 		               
-		        case 5:
+		        case 5: //Wyznacznik macierzy
 		        {
 		        	cout << " TWORZENIE MACIERZY: " << endl;
 					cout << endl;
@@ -411,11 +438,50 @@ int main()
 		            break;
 				}
 		        
-		        case 6:break;
+		        case 6: //Stopien macierzy
+				{
+		        	cout << " TWORZENIE MACIERZY: " << endl;
+					cout << endl;
+					    
+					cout << " Podaj WIELKOSC macierzy [NxN]: ";
+					cin>>liczbaA;                
+					cout << " Stworzyles MACIERZ: " << liczbaA << "x" << liczbaA << endl;
+					cout << endl; 
+					
+		        	
+					cout << " Podaj wartosci MACEIRZY:"<< endl;                    
+					macierz A (liczbaA,liczbaA);
+					A.WprowadzDane(liczbaA, liczbaA);
+					cout << " MACIERZ: ";
+					A.Wyswietl();
+		
+					cout << " Stopien Macierzy: " ;
+					A.Stopien(liczbaA, liczbaA);
+		            break;
+				}
 		        
-		        case 7:break;
+				case 7: //import z pliku
+				{
+					int n = 0;
+					string fileName;
+					cout << "Przykladowa zawartosc pliku:\n1 2 3 4\n4 5 6 6\n7 8 9 7\n4 6 6 6 " << endl;
+					cout << "Podaj sciezke do pliku: ";
+					cin >> fileName;
+					cout << "Podaj WIELKOSC macierzy [NxN]: ";
+					cin >> n;
+
+					macierz m(n, n);
+					m.readFromFile(fileName);
+					cout << "Pobrana macierz:" << endl;
+					m.Wyswietl();
+					break;
+				}
+				
+		        case 8:break;
+
+				case 9:break;
 		        
-		        case 8:
+		        case 10:
 				{
 				 	cout << "Koniec programu!\n";
 		            break; 
