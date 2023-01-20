@@ -3,6 +3,7 @@
 #include <cstdlib>
 #include <cstdio>
 #include <ctime>
+#include <windows.h>
 using namespace std; 
  
 class macierz 
@@ -182,7 +183,6 @@ void macierz::readFromFile(string fileName) //Wczytanie macierzy z pliku
 
 void macierz::Random (unsigned int wiersze, unsigned int kolumny) //Uzupe³nienie automatyczne liczbami losowymi od 0 do 9
 {
-	srand( time( NULL ) );
 	int losowa;
 	for ( int i = 0; i < wiersze; i++ ) 
     {  
@@ -300,9 +300,9 @@ void wyswietlmenu()
 {
 	cout << endl;
     cout << " ||| PROGRAM WYKONUJACY DZIALANIA NA MACIERZACH [NxN] |||\n";
-    cout << " 1. DODAWANIE Macierzy (U. RECZNE)\n";
-    cout << " 2. ODEJMOWANIE Macierzy (U. RECZNE)\n";
-    cout << " 3. MNOZENIE Macierzy (U. RECZNE)\n";
+    cout << " 1. DODAWANIE Macierzy (U. LOSOWE)\n";
+    cout << " 2. ODEJMOWANIE Macierzy (U. LOSOWE)\n";
+    cout << " 3. MNOZENIE Macierzy (U. LOSOWE)\n";
     cout << " 4. TRANSPOZYCJA Macierzy (U. LOSOWE)\n";
     cout << " 5. WYZNACZNIK Macierzy(DLA 2x2 i 3x3) (U. LOSOWE)\n";
     cout << " 6. STOPIEN Macierzy (U. LOSOWE)\n";
@@ -321,7 +321,7 @@ int main()
 	int liczbaA;
 	int liczbaB;
 	int wybor;
- 	
+ 	srand( time( NULL ) );
  	while(wybor != 10)
  	{
  		wyswietlmenu();
@@ -352,17 +352,17 @@ int main()
 					if (liczbaA == liczbaB) //warunek niezbêdny do wykonania dzia³an na macierzach
 		            {	
 		            	macierz A (liczbaA,liczbaA); //stworzenie pierwszej macierzy - konstruktor dwuparametrowy
-					   	cout << " Podaj WARTOSCI PIERWSZEJ Macierzy:"<< endl;	                     
-			            A.WprowadzDane (liczbaA,liczbaA); //uzupe³nianie rêczne wartoœci pierwszej macierzy
+					   	cout << " POGLADOWE uzupelnienie LOSOWE:"<< endl;	                     
+			            A.Random (liczbaA,liczbaA); //uzupe³nianie automatyczne - losowe wartoœci pierwszej macierzy
 			            cout << " Pierwsza Macierz: ";
 			            A.Wyswietl(); // wyœwietlenie zawartoœci pierwszej macierzy
-						 
+						Sleep(1000); //OPÓ¯NIENIE WYSWIETLENIA   1000ms = 1s //////////////////////////////////////////////////////////////
 			            macierz B (liczbaB,liczbaB); //stworzenie drugiej macierzy - konstruktor dwuparametrowy
-			            cout << " Podaj wartosci DRUGIEJ Macierzy:"<< endl;   
-			            B.WprowadzDane (liczbaB, liczbaB); //uzupe³nianie rêczne wartoœci drugiej macierzy
+			            cout << " POGLADOWE uzupelnienie LOSOWE:"<< endl;   
+			            B.Random (liczbaB, liczbaB); //uzupe³nianie automatyczne - losowe wartoœci drugiej macierzy
 			            cout << " Druga Macierz: " ;
 			            B.Wyswietl(); // wyœwietlenie zawartoœci drugiej macierzy
-		
+						Sleep(1000); //OPÓ¯NIENIE WYSWIETLENIA   1000ms = 1s //////////////////////////////////////////////////////////////
 						macierz C=A+(B); // utworzenie macierzy C która jest wynikiem dodania macierzy A i B
 			            cout << " Wynik DODAWANIA Macierzy: ";
 			            C.Wyswietl(); // wyœwietlenie zawartoœci trzeciej macierzy
@@ -390,17 +390,17 @@ int main()
 					if (liczbaA == liczbaB)
 		            {
 		            	macierz A (liczbaA,liczbaA);
-					   	cout << " Podaj WARTOSCI PIERWSZEJ Macierzy:"<< endl;               
-			            A.WprowadzDane(liczbaA, liczbaA);
+					   	cout << " POGLADOWE uzupelnienie LOSOWE:"<< endl;               
+			            A.Random(liczbaA, liczbaA);
 			            cout << " Pierwsza Macierz: ";
 			            A.Wyswietl();
-			            
+			            Sleep(1000); //OPÓ¯NIENIE WYSWIETLENIA   1000ms = 1s //////////////////////////////////////////////////////////////
 			            macierz B (liczbaB,liczbaB);			                
-						cout << " Podaj WARTOSCI DRUGIEJ Macierzy:"<< endl;                    
-			            B.WprowadzDane(liczbaB, liczbaB);
+						cout << " POGLADOWE uzupelnienie LOSOWE:"<< endl;                    
+			            B.Random(liczbaB, liczbaB);
 			            cout << " Druga Macierz: ";
 			            B.Wyswietl();
-			                
+			            Sleep(1000); //OPÓ¯NIENIE WYSWIETLENIA   1000ms = 1s //////////////////////////////////////////////////////////////    
 						macierz C=A-(B); 
 						cout << " Wynik ODEJMOWANIA Macierzy: ";
 			            C.Wyswietl();
@@ -428,17 +428,17 @@ int main()
 					if (liczbaA == liczbaB)
 		            {  
 						macierz A (liczbaA,liczbaA);  	
-						cout << " Podaj WARTOSCI PIERWSZEJ Macierzy:"<< endl;                     
-			            A.WprowadzDane(liczbaA, liczbaA);
+						cout << " POGLADOWE uzupelnienie LOSOWE:"<< endl;                     
+			            A.Random(liczbaA, liczbaA);
 			            cout << " Pierwsza Macierz: ";
 			            A.Wyswietl();
-			            
+			            Sleep(1000); //OPÓ¯NIENIE WYSWIETLENIA   1000ms = 1s //////////////////////////////////////////////////////////////
 			            macierz B (liczbaB,liczbaB);
-						cout << " Podaj WARTOSCI DRUGIEJ Macierzy:"<< endl;    
-			            B.WprowadzDane(liczbaB, liczbaB);
+						cout << " POGLADOWE uzupelnienie LOSOWE:"<< endl;  
+			            B.Random(liczbaB, liczbaB);
 			            cout << " Druga Macierz: ";
 			            B.Wyswietl();
-		
+						Sleep(1000); //OPÓ¯NIENIE WYSWIETLENIA   1000ms = 1s //////////////////////////////////////////////////////////////
 						macierz C=A*(B); 
 						cout << " Wynik MNOZENIA Macierzy: " ;
 			            C.Wyswietl();
