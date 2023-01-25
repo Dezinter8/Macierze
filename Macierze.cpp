@@ -13,15 +13,15 @@ class macierz
       	unsigned int kolumny;  
       	double **tablica; 
       	
-		macierz(); //konstruktor domyslny 
-      	macierz(unsigned int wiersze, unsigned int kolumny); //konstruktor dwuparametrowy
-      	~macierz() //destruktor
+		macierz();                                                      //konstruktor domyslny 
+      	macierz(unsigned int wiersze, unsigned int kolumny);            //konstruktor dwuparametrowy
+      	~macierz()                                                      //destruktor
       	{
       		for( int i = 0; i < wiersze; i++ )                
       		{delete[]tablica[i];}        
       		delete[] tablica;
       	}
-      	macierz(macierz const &m); //konstruktor kopiujacy 
+      	macierz(macierz const &m);                                      //konstruktor kopiujacy 
       
       	//operatory przeciazenia
       	friend macierz operator+(const macierz &m1, const macierz &m2); 
@@ -30,19 +30,20 @@ class macierz
       	
 		//metody
       	void Wyswietl()const;
-      	void WprowadzDane(unsigned int wiersze, unsigned int kolumny);
-		void Transpozycja(unsigned int wiersze, unsigned int kolumny);
-		void Wyznacznik(unsigned int wiersze, unsigned int kolumny);
-		void Stopien(unsigned int wiersze, unsigned int kolumny);
-		void readFromFile(string fileName);
-		void Random(unsigned int wiersze, unsigned int kolumny);
+      	void WprowadzDane();
+		void Transpozycja();
+		void Wyznacznik();
+		void Stopien();
+		void readFromFile();
+        void writeToFile();
+		void Random();
 		void Szukaj(unsigned int cos);
 		void Zmien(unsigned int numer, unsigned int wartosc);
 }; 
 
 
 
-macierz::macierz ()  //konstruktor domyslny 
+macierz::macierz ()                                                                 //konstruktor domyslny 
 {          
     wiersze=kolumny=2;    
     tablica = new double *[wiersze]; 
@@ -59,7 +60,7 @@ macierz::macierz ()  //konstruktor domyslny
 
 
 
-macierz::macierz (unsigned int wier, unsigned int kol)  //konstruktor dwuparametrowy
+macierz::macierz (unsigned int wier, unsigned int kol)                             //konstruktor dwuparametrowy
 { 
     kolumny = kol; 
     wiersze = wier; 
@@ -71,7 +72,7 @@ macierz::macierz (unsigned int wier, unsigned int kol)  //konstruktor dwuparamet
 
 
 
-macierz::macierz(macierz const &m)  //konstruktor kopiujacy
+macierz::macierz(macierz const &m)                                                  //konstruktor kopiujacy
 { 
     kolumny = m.kolumny; 
     wiersze = m.wiersze; 
@@ -98,7 +99,7 @@ void macierz::Wyswietl()const
 } 
 
 
-void macierz::WprowadzDane (unsigned int wiersze, unsigned int kolumny) //Uzupe³nianie RECZNE
+void macierz::WprowadzDane ()                               //Uzupelnienie RECZNE
 {
 	for ( int i = 0; i < wiersze; i++ ) 
     {  
@@ -106,7 +107,7 @@ void macierz::WprowadzDane (unsigned int wiersze, unsigned int kolumny) //Uzupe³
         { 
 			cout << "PODAJ [" << i << "]" << "[" << j << "] element macierzy: ";
             double wartosc;
-            while(!(cin>>wartosc))//wykonuje sie dopoki uzytkownik bedzie wprowadzal bledne dane
+            while(!(cin>>wartosc))                                                  //wykonuje sie dopoki uzytkownik bedzie wprowadzal bledne dane
             { 
               	cout << "BLAD! Wprowadz poprawna wartosc: ";
               	cin.clear(); 
@@ -119,7 +120,7 @@ void macierz::WprowadzDane (unsigned int wiersze, unsigned int kolumny) //Uzupe³
 
 
 
-void macierz::Transpozycja (unsigned int wiersze, unsigned int kolumny) //Wykonanie Transpozycji macierzy
+void macierz::Transpozycja ()                            //Wykonanie Transpozycji macierzy
 {
 	for ( int i = 0; i < wiersze; i++ ) 
     {  
@@ -138,7 +139,7 @@ void macierz::Transpozycja (unsigned int wiersze, unsigned int kolumny) //Wykona
 
 
 
-void macierz::Wyznacznik (unsigned int wiersze, unsigned int kolumny) //Obliczenie Wyznacznika Macierzy(tylko dla 2x2 i 3x3)
+void macierz::Wyznacznik ()               //Obliczenie Wyznacznika Macierzy(tylko dla 2x2 i 3x3)
 {
 	int wyznacznik = 0;
 	
@@ -154,7 +155,7 @@ void macierz::Wyznacznik (unsigned int wiersze, unsigned int kolumny) //Obliczen
 	}
 }
 
-void macierz::Stopien (unsigned int wiersze, unsigned int kolumny) //Obliczenie Stopnia Macierzy
+void macierz::Stopien ()                //Obliczenie Stopnia Macierzy
 {
 	int Stopien = 0;
     for (int i = 0; i < wiersze; i++) {
@@ -169,19 +170,33 @@ void macierz::Stopien (unsigned int wiersze, unsigned int kolumny) //Obliczenie 
 	cout << Stopien << endl;
 }
 
-/*
-void macierz::readFromFile(string fileName) //Wczytanie macierzy z pliku
+
+void macierz::readFromFile()              //Wczytanie macierzy z pliku
 {
-	ifstream file(fileName);
+	ifstream file("macierz.txt");                       //nazwa pliku z ktorego pobieramy macierz
 	for (int i = 0; i < wiersze; i++)
 		for (int j = 0; j < kolumny; j++)
 			file >> tablica[i][j];
 	file.close();
 }
-*/
 
+void macierz::writeToFile()                             //Wczytanie macierzy do pliku
+{
+    cout << endl << "Eksportowanie macierzy: " << endl;
+    ofstream file;
+    file.open("macierz.txt");                           //nazwa tworzonego pliku do ktorego wpisujemy macierz
+    for (int i = 0; i < wiersze; i++) {
+        for (int j = 0; j < kolumny; j++) {
+            file << tablica[i][j] << " ";
+        }
+        file << std::endl;
+    }
+    file.close();
+    cout << "Zawartosc pliku macierz.txt\n";
+    system("type macierz.txt");
+}
 
-void macierz::Random (unsigned int wiersze, unsigned int kolumny) //Uzupe³nienie automatyczne liczbami losowymi od 0 do 9
+void macierz::Random ()                               //Uzupelnienie automatyczne liczbami losowymi od 0 do 9
 {
 	int losowa;
 	for ( int i = 0; i < wiersze; i++ ) 
@@ -195,7 +210,7 @@ void macierz::Random (unsigned int wiersze, unsigned int kolumny) //Uzupe³nienie
 }
 
 
-void macierz::Szukaj (unsigned int cos) //Przeszukanie macierzy o podana wartoœæ i zwrocenie wyniku
+void macierz::Szukaj (unsigned int cos)                //Przeszukanie macierzy o podana wartosc i zwrocenie wyniku
 {
 	int ile = 0;
 	int F = wiersze * kolumny;
@@ -215,11 +230,11 @@ void macierz::Szukaj (unsigned int cos) //Przeszukanie macierzy o podana wartoœæ
     } 
     
     if(ile == 0)
-    	cout << " NIE MA ELEMENTU o podanej wartosci w Macierzy!"<< endl;
+    	cout << "NIE MA ELEMENTU o podanej wartosci w Macierzy!"<< endl;
     else
 	{
-		cout << " Liczba : |" << cos << "| wystepuje w macierzy: |" << ile << "| razy." << endl;  
-		cout << " Liczba : |" << cos << "| wystepuje w macierzy na nastepujacych pozycjach: | ";
+		cout << "Liczba : |" << cos << "| wystepuje w macierzy: |" << ile << "| razy." << endl;  
+		cout << "Liczba : |" << cos << "| wystepuje w macierzy na nastepujacych pozycjach: | ";
 		for (int i = 0; i < ile; i++)
 			cout << tab[i] << " | ";
 		cout<< endl;
@@ -227,7 +242,7 @@ void macierz::Szukaj (unsigned int cos) //Przeszukanie macierzy o podana wartoœæ
 }
 
 
-void macierz::Zmien (unsigned int numer, unsigned int wartosc) // Zmiana wartoœci podanego elementu
+void macierz::Zmien (unsigned int numer, unsigned int wartosc)                      // Zmiana wartosci podanego elementu
 {
 	int temp = 1;
 	for ( int i = 0; i < wiersze; i++ ) 
@@ -247,7 +262,7 @@ void macierz::Zmien (unsigned int numer, unsigned int wartosc) // Zmiana wartoœc
 
 
 
-macierz operator+(const macierz &m1, const macierz &m2) //operator przeciazenia +
+macierz operator+(const macierz &m1, const macierz &m2)                             //operator przeciazenia +
 { 
 
 	  	macierz m3(m1);
@@ -262,7 +277,7 @@ macierz operator+(const macierz &m1, const macierz &m2) //operator przeciazenia 
 
 
 
-macierz operator-(const macierz &m1, const macierz &m2) //operator przeciazenia -
+macierz operator-(const macierz &m1, const macierz &m2)                             //operator przeciazenia -
 { 
 
 	  	macierz m3(m1); 
@@ -277,7 +292,7 @@ macierz operator-(const macierz &m1, const macierz &m2) //operator przeciazenia 
 
 
 
-macierz operator*(const macierz &m1, const macierz &m2) //operator przeciazenia *
+macierz operator*(const macierz &m1, const macierz &m2)                             //operator przeciazenia *
 {  
 	  	macierz m3(m1); 
        	for (int i = 0; i <m1.wiersze; i++)        
@@ -303,94 +318,88 @@ int main()
  	srand( time( NULL ) );
 
 
-					cout << " Utworzenie PIERWSZEJ Macierzy 3x3 " << endl;
+					cout << "Utworzenie PIERWSZEJ Macierzy 3x3 " << endl;
 					liczbaA = 3;
-					macierz A (liczbaA,liczbaA); //stworzenie pierwszej macierzy - konstruktor dwuparametrowy
-					cout << " Automatyczne UZUPELNIENIE LOSOWE: " ;
-					A.Random (liczbaA,liczbaA); 
+					macierz A (liczbaA,liczbaA);                                    //stworzenie pierwszej macierzy - konstruktor dwuparametrowy
+					cout << "Automatyczne UZUPELNIENIE LOSOWE: " ;
+					A.Random (); 
 					A.Wyswietl();
 			        
 
-		  			Sleep(1000); //OPÓ¯NIENIE WYSWIETLENIA   1000ms = 1s //////////////////////////////////////////////////////////////
+		  			Sleep(1000);                                                    //OPÓ¯NIENIE WYSWIETLENIA   1000ms = 1s //////////////////////////////////////////////////////////////
 		  			cout << endl;
-			        cout << " WYZNACZNIK Macierzy: " ;
-			        A.Wyznacznik(liczbaA, liczbaA); //obliczenie i wyœwietlenie WYZNACZNIKA Macierzy
+			        cout << "WYZNACZNIK Macierzy: " ;
+			        A.Wyznacznik();                                                 //obliczenie i wyswietlenie WYZNACZNIKA Macierzy
 
 			        
-					Sleep(1000); //OPÓ¯NIENIE WYSWIETLENIA   1000ms = 1s //////////////////////////////////////////////////////////////
+					Sleep(1000);                                                    //OPÓ¯NIENIE WYSWIETLENIA   1000ms = 1s //////////////////////////////////////////////////////////////
 					cout << endl;
-					cout << " Stopien Macierzy: " ;
-					A.Stopien(liczbaA, liczbaA); //obliczenie i wyœwietlenie STOPNIA Macierzy
+					cout << "Stopien Macierzy: " ;
+					A.Stopien();                                                    //obliczenie i wyswietlenie STOPNIA Macierzy
 
-					Sleep(1000); //OPÓ¯NIENIE WYSWIETLENIA   1000ms = 1s //////////////////////////////////////////////////////////////  
+					Sleep(1000);                                                    //OPÓ¯NIENIE WYSWIETLENIA   1000ms = 1s //////////////////////////////////////////////////////////////  
 					cout << endl;      
-		            cout << " SZUKANIE liczby 5 w Macierzy "<< endl;      
+		            cout << "SZUKANIE liczby 5 w Macierzy "<< endl;      
 		            int cos = 5;
-		            A.Szukaj(cos); //Przeszukanie Macierzy i wyœwietlenie wyniku
+		            A.Szukaj(cos);                                                  //Przeszukanie Macierzy i wyswietlenie wyniku
 
 
-					Sleep(1000); //OPÓ¯NIENIE WYSWIETLENIA   1000ms = 1s //////////////////////////////////////////////////////////////
+					Sleep(1000);                                                    //OPÓ¯NIENIE WYSWIETLENIA   1000ms = 1s //////////////////////////////////////////////////////////////
 					cout << endl;
 		            cout << " ZAMIANA wartosci elementu numer 3 na 99. "<< endl;      
 		            int numer = 3;
 			        int wartosc = 99;
-			        A.Zmien(numer, wartosc); //Zamiana zawartoœci elementu na podan¹, wed³ug numeru elementu w Macierzy od 1 do....
-			        cout << " MACIERZ po dokonaniu ZMIANY: "<< endl; 
+			        A.Zmien(numer, wartosc);                                        //Zamiana zawartosci elementu na podany, wedlug numeru elementu w Macierzy od 1 do....
+			        cout << "MACIERZ po dokonaniu ZMIANY: "<< endl; 
 		    		A.Wyswietl();	
-					Sleep(1000); //OPÓ¯NIENIE WYSWIETLENIA   1000ms = 1s //////////////////////////////////////////////////////////////			
+					Sleep(1000);                                                    //OPÓ¯NIENIE WYSWIETLENIA   1000ms = 1s //////////////////////////////////////////////////////////////			
 					cout << endl;				
-					cout << " Utworzenie  DRUGIEJ Macierzy 3x3 " << endl;
+					cout << "Utworzenie  DRUGIEJ Macierzy 3x3 " << endl;
 					liczbaB = 3;
-					macierz B (liczbaB,liczbaB); //stworzenie drugiej macierzy - konstruktor dwuparametrowy
-					cout << " Automatyczne UZUPELNIENIE LOSOWE: " ;
-					B.Random (liczbaB, liczbaB); //uzupe³nianie automatyczne - losowe wartoœci drugiej macierzy
+					macierz B (liczbaB,liczbaB);                                    //stworzenie drugiej macierzy - konstruktor dwuparametrowy
+					cout << "Automatyczne UZUPELNIENIE LOSOWE: " ;
+					B.Random ();                                                    //uzupelnianie automatyczne - losowe wartoï¿½ci drugiej macierzy
 					B.Wyswietl();
 					
-					Sleep(1000); //OPÓ¯NIENIE WYSWIETLENIA   1000ms = 1s //////////////////////////////////////////////////////////////
+					Sleep(1000);                                                    //OPÓ¯NIENIE WYSWIETLENIA   1000ms = 1s //////////////////////////////////////////////////////////////
 					cout << endl;
-					macierz C=A+(B); // utworzenie macierzy C która jest wynikiem dodania macierzy A i B
-			        cout << " Wynik DODAWANIA Macierzy: ";
-			        C.Wyswietl(); // wyœwietlenie zawartoœci trzeciej macierzy
+					macierz C=A+(B);                                                // utworzenie macierzy C ktora jest wynikiem dodania macierzy A i B
+			        cout << "Wynik DODAWANIA Macierzy: ";
+			        C.Wyswietl();                                                   // wyswietlenie zawartosci trzeciej macierzy
 					
-					Sleep(1000); //OPÓ¯NIENIE WYSWIETLENIA   1000ms = 1s //////////////////////////////////////////////////////////////
+					Sleep(1000);                                                    //OPÓ¯NIENIE WYSWIETLENIA   1000ms = 1s //////////////////////////////////////////////////////////////
 					cout << endl;    
 					macierz D=A-(B); 
-					cout << " Wynik ODEJMOWANIA Macierzy: ";
+					cout << "Wynik ODEJMOWANIA Macierzy: ";
 			        D.Wyswietl();
 
-					Sleep(1000); //OPÓ¯NIENIE WYSWIETLENIA   1000ms = 1s //////////////////////////////////////////////////////////////
+					Sleep(1000);                                                    //OPÓ¯NIENIE WYSWIETLENIA   1000ms = 1s //////////////////////////////////////////////////////////////
 					cout << endl;
 					macierz E=A*(B); 
-					cout << " Wynik MNOZENIA Macierzy: " ;
+					cout << "Wynik MNOZENIA Macierzy: " ;
 			        E.Wyswietl();
 			        
-			        
-			        Sleep(1000); //OPÓ¯NIENIE WYSWIETLENIA   1000ms = 1s //////////////////////////////////////////////////////////////
-			        cout << endl;
-		            cout << " Wynik TRANSPOZYCJI Macierzy: " << endl ;
-		            A.Transpozycja(liczbaA, liczbaA); // wykonanie dzia³añ TRANSPOZYCJI na macierzy
-		            B.Transpozycja(liczbaB, liczbaB);
-		            cout << " PIERWSZA Macierzy: " ;
-		            A.Wyswietl(); // wyœwietlenie zawartoœci macierzy po TRANSPOZYCJI
-		            cout << " DRUGA Macierzy: " ;
-		            B.Wyswietl();
+			        Sleep(1000);                                                    //OPÓ¯NIENIE WYSWIETLENIA   1000ms = 1s //////////////////////////////////////////////////////////////
+			        macierz F=A;
+                    macierz G=A;
+                    cout << endl;
+		            cout << "Wynik TRANSPOZYCJI Macierzy: " << endl ;
+		            F.Transpozycja();                                               // wykonanie dzialan TRANSPOZYCJI na macierzy
+		            G.Transpozycja();
+		            cout << "PIERWSZA Macierzy: " ;
+		            F.Wyswietl();                                                   // wyswietlenie zawartosci macierzy po TRANSPOZYCJI
+		            cout << "DRUGA Macierzy: " ;
+		            G.Wyswietl();
 		            
-		            					/*
-					int n = 0;
-					string fileName;
-					cout << "Przykladowa zawartosc pliku:\n1 2 3 4\n4 5 6 6\n7 8 9 7\n4 6 6 6 " << endl;
-					cout << "Podaj sciezke do pliku: ";
-					cin >> fileName;
-					cout << "Podaj WIELKOSC macierzy [NxN]: ";
-					cin >> n;
-
-					macierz m(n, n);
-					m.readFromFile(fileName);
-					cout << "Pobrana macierz:" << endl;
+					Sleep(1000);                                                    //OPÓ¯NIENIE WYSWIETLENIA   1000ms = 1s //////////////////////////////////////////////////////////////					
+                    A.writeToFile();
+					Sleep(1000);                                                    //OPÓ¯NIENIE WYSWIETLENIA   1000ms = 1s //////////////////////////////////////////////////////////////
+                    
+					macierz m(liczbaA,liczbaA);
+					m.readFromFile();
+					cout << endl << "Pobrana macierz:";
 					m.Wyswietl();
-					*/
-
-
+					
     system ("PAUSE");
     return 0; 
 }
